@@ -9,6 +9,7 @@ app = Flask(__name__)
 app.secret_key = "SECRETSECRETSECRET"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+
 @app.route("/")
 def homepage():
     """Show homepage."""
@@ -30,8 +31,13 @@ def rsvp():
 
 @app.route("/games")
 def games():
-    games = Game.query.all()
-    return render_template("games.html", games=games)
+    """Show game list from db"""
+
+    if session.get('RSVP'):
+        games = Game.query.all()
+        return render_template("games.html", games=games)
+    else:
+        return redirect("/")
 
 
 if __name__ == "__main__":
